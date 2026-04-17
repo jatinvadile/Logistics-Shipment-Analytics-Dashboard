@@ -129,7 +129,7 @@ Designed a star schema with:
 ### 4. Advanced Analytics Logic
 - Tracks shipment path **until first occurrence of a key hub** (e.g., Memphis)
 - Analyzes **multi-hub routing patterns**
-- Differentiates **weekday vs. Saturday** shipment behavior
+- Differentiates **weekday vs. Weekend** shipment behavior
 - Calculates **expected vs. actual** delivery timelines
 - Measures **first-attempt delivery success rate** (~90% logic threshold)
 
