@@ -1,205 +1,271 @@
-🔷 1. Project Overview
+# 🚚 Logistics & Shipment Analytics Platform
 
-This project focuses on building an end-to-end logistics analytics platform to track shipment movement, analyze delivery performance, and optimize route efficiency across multiple global hubs.
+> An end-to-end logistics intelligence system for real-time shipment tracking, delay analysis, and delivery performance optimization — powered by **FedEx API**, **Python**, **MySQL**, and **Power BI**.
 
-The system enables real-time visibility into shipment lifecycle, identifies delays, and improves On-Time In-Full (OTIF) delivery performance through data-driven insights.
+---
 
-🔷 2. Business Problem
-Shipment tracking was manual and fragmented across systems
-No centralized visibility into shipment routes and delays
-Difficulty in identifying bottlenecks across hubs
-Lack of insights into:
-First attempt delivery success
-Transit time variations
-Weekend vs weekday delivery impact
-🔷 3. Solution Approach
-🔹 Data Collection
-Integrated FedEx API to fetch real-time shipment tracking data (AWB level)
-Extracted data including:
-Shipment timestamps
-Scan locations (hubs)
-Delivery status
-Transit events
-🔹 Data Processing & Storage
-Built a Python-based pipeline to:
-Handle API authentication (token-based)
-Process bulk AWB tracking data
-Parse nested JSON responses
-Stored structured data into MySQL database for further analysis
-🔹 Data Modeling
-Designed a fact table for shipments with dimensions like:
-AWB Number
-Origin / Destination
-Hub sequence (route path)
-Shipment status
-Delivery timestamps
-Created derived fields:
-Transit Time
-Delay Flags
-First Attempt Delivery Indicator
-Route Mapping (hub-to-hub sequence)
-🔹 Advanced Logic Implementation
-Built custom logic to:
-Track shipment path until first occurrence of key hub (e.g., Memphis)
-Analyze multi-hub routing patterns
-Differentiate weekday vs Saturday shipment behavior
-Calculate expected vs actual delivery timelines
-Measure first-attempt delivery success rate (~90% logic)
-🔹 Dashboard Development (Power BI)
+## 📌 Table of Contents
 
-Developed an interactive Logistics Dashboard with:
+- [Overview](#-overview)
+- [Business Problem](#-business-problem)
+- [Architecture](#-architecture)
+- [Tech Stack](#-tech-stack)
+- [Solution Approach](#-solution-approach)
+- [Key Features](#-key-features)
+- [Dashboard KPIs](#-dashboard-kpis)
+- [Key Insights](#-key-insights)
+- [Business Impact](#-business-impact)
+- [Project Structure](#-project-structure)
+- [Getting Started](#-getting-started)
+- [Future Enhancements](#-future-enhancements)
 
-📊 Key KPIs:
-Total Shipments
-On-Time Delivery % (OTIF)
-Average Transit Time
-First Attempt Success Rate
-Delayed Shipments %
-📈 Visuals:
-Shipment Flow (Origin → Hub → Destination)
-Delay Heatmaps (by time & hub)
-Hub-wise Performance Analysis
-Trend Analysis (daily/weekly shipments)
-Route Efficiency Comparison
-🔷 4. Key Insights Delivered
-Identified delay-prone hubs impacting delivery timelines
-Discovered patterns in weekend shipment delays
-Highlighted inefficiencies in multi-hop routes
-Improved visibility into end-to-end shipment lifecycle
-🔷 5. Business Impact
-Reduced manual tracking effort by ~50%
-Improved delivery planning efficiency by 15–25%
-Enabled faster decision-making with real-time shipment insights
-Increased transparency across logistics operations
-🔷 6. Key Features
+---
 
-✅ Real-time shipment tracking
-✅ Multi-hub route analysis
-✅ Delay detection & root cause analysis
-✅ First attempt delivery tracking
-✅ Interactive and scalable dashboard
+## 📖 Overview
 
-🔷 7. Future Enhancements
-Predictive delay modeling using ML
-Automated route optimization suggestions
-Integration with multiple carriers (beyond FedEx)
-Alert system for delayed shipments
-🔥 Pro Tip for LinkedIn
+This project delivers a **centralized logistics analytics platform** that tracks shipment movement at the AWB (Air Waybill) level across multiple global hubs. It replaces fragmented, manual tracking processes with an automated pipeline that surfaces actionable insights via an interactive Power BI dashboard.
 
-Use:
+The system enables **real-time shipment lifecycle visibility**, identifies delay patterns, and improves **On-Time In-Full (OTIF)** delivery performance through data-driven decision-making.
 
-This full version in Projects/GitHub
-And a short bullet version in Experience section
+---
 
-If you want next level 🚀
-I can:
+## 🔴 Business Problem
 
-Create GitHub README (with architecture diagram)
-Design Power BI dashboard mock UI image
-Or convert this into FAANG-level resume bullet points
-Create GitHub README (with architecture diagram)
+| Pain Point | Impact |
+|---|---|
+| Manual, fragmented shipment tracking | High operational overhead |
+| No centralized hub-level visibility | Bottlenecks went undetected |
+| No first-attempt delivery tracking | Missed optimization opportunities |
+| Transit time variation not measured | SLA breaches undetected |
+| Weekend vs. weekday delivery blind spot | Planning inefficiency |
 
-Here’s a professional GitHub README for your project (with a clean architecture diagram) 🚀
+---
 
-📦 Logistics & Shipment Analytics Platform
+## 🏗️ Architecture
 
-🚀 End-to-End Shipment Tracking & Analytics using Power BI, Python, SQL & FedEx API
+```
+┌─────────────────────┐
+│     FedEx API        │
+│  (Shipment Tracking) │
+└──────────┬──────────┘
+           │  Real-time AWB data
+           ▼
+┌─────────────────────┐
+│  Python ETL Script   │
+│  · API Auth (OAuth)  │
+│  · Bulk AWB extract  │
+│  · JSON parsing      │
+│  · Data validation   │
+└──────────┬──────────┘
+           │  Structured records
+           ▼
+┌─────────────────────┐
+│    MySQL Database    │
+│  · Fact table        │
+│  · Dimension tables  │
+│  · Derived fields    │
+└──────────┬──────────┘
+           │  SQL queries
+           ▼
+┌─────────────────────┐
+│      Power BI        │
+│  · Data Modeling     │
+│  · DAX measures      │
+│  · Dashboards        │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│  Business Insights   │
+│  · OTIF %            │
+│  · Delay analysis    │
+│  · Hub performance   │
+└─────────────────────┘
+```
 
-📌 Overview
+---
 
-This project is an end-to-end logistics analytics solution designed to track shipment movement across multiple global hubs, analyze delivery performance, and improve On-Time In-Full (OTIF) metrics.
+## 🛠️ Tech Stack
 
-It provides real-time visibility into shipment lifecycle, identifies bottlenecks, and enables data-driven logistics optimization.
+| Layer | Technology |
+|---|---|
+| **Data Source** | FedEx Tracking API (v1) |
+| **Data Processing** | Python · Pandas · Requests · PyTZ |
+| **Database** | MySQL |
+| **Visualization** | Power BI |
+| **Query Language** | SQL |
+| **Analytics** | DAX (Power BI) |
 
-🎯 Objectives
-Track shipment lifecycle from origin to delivery
-Analyze transit time, delays, and route efficiency
-Improve first-attempt delivery success rate
-Provide actionable insights via interactive dashboards
-🏗️ Architecture
-                +----------------------+
-                |   FedEx API          |
-                | (Shipment Tracking)  |
-                +----------+-----------+
-                           |
-                           v
-                +----------------------+
-                |   Python ETL Script  |
-                | - API Auth           |
-                | - Data Extraction    |
-                | - JSON Parsing       |
-                +----------+-----------+
-                           |
-                           v
-                +----------------------+
-                |     MySQL Database   |
-                |  (Structured Tables) |
-                +----------+-----------+
-                           |
-                           v
-                +----------------------+
-                |   Power BI           |
-                | - Data Modeling      |
-                | - DAX KPIs           |
-                | - Dashboards         |
-                +----------+-----------+
-                           |
-                           v
-                +----------------------+
-                | Business Insights    |
-                | - OTIF               |
-                | - Delay Analysis     |
-                | - Hub Performance    |
-                +----------------------+
-⚙️ Tech Stack
-Layer	Tools Used
-Data Source	FedEx API
-Data Processing	Python (Pandas, Requests)
-Database	MySQL
-Visualization	Power BI
-Querying	SQL
-Analytics	DAX
-🔄 Data Pipeline
-Fetch Data
-Extract shipment tracking data via FedEx API
-Includes timestamps, locations, statuses
-Process Data
-Clean and transform JSON data using Python
-Handle API authentication and batching
-Store Data
-Load structured data into MySQL tables
-Analyze Data
-Build star schema model in Power BI
-Create KPIs using DAX
-Visualize
-Develop dashboards for logistics insights
-📊 Key Features
+---
 
-✅ Real-time shipment tracking
-✅ Multi-hub route analysis (Mumbai → Dubai → Memphis, etc.)
-✅ Delay detection & root cause analysis
-✅ First-attempt delivery success tracking
-✅ Weekday vs Saturday delivery insights
-✅ Interactive Power BI dashboards
+## 💡 Solution Approach
 
-📈 Key KPIs
-Total Shipments
-On-Time Delivery % (OTIF)
-Average Transit Time
-First Attempt Delivery Success Rate
-Delayed Shipment %
-🔍 Sample Insights
-Identified delay-prone hubs impacting delivery timelines
-Improved shipment visibility across multi-hop routes
-Highlighted inefficiencies in weekend deliveries
-Enabled proactive logistics planning
-🚀 Business Impact
-⏱️ Reduced manual tracking effort by ~50%
-📊 Improved delivery planning efficiency by 15–25%
-⚡ Enabled faster decision-making with real-time insights
-🔎 Increased transparency across logistics operations
-🔮 Future Enhancements
-Predictive delay analytics (ML models)
-Multi-carrier integration (DHL, UPS, etc.)
-Real-time alert system for delayed shipments
-Route optimization engine
+### 1. Data Collection
+- Integrated **FedEx REST API** (`/track/v1/trackingnumbers`) for AWB-level tracking
+- Extracted shipment timestamps, scan locations, delivery status, and transit events
+- Batch processing of up to **30 AWBs per API call** with automatic token refresh
+
+### 2. Data Processing & Storage
+- Built a **Python ETL pipeline** handling:
+  - OAuth2 token-based API authentication
+  - Bulk AWB validation (12–15 digit numeric check)
+  - Nested JSON response parsing
+  - IST timezone normalization
+- Stored structured data into **MySQL** for downstream analysis
+
+### 3. Data Modeling
+Designed a star schema with:
+
+**Fact Table — Shipments**
+- AWB Number, Event DateTime, Status, Location, Country
+
+**Derived Fields**
+- `Transit Time` — elapsed time between key scan events
+- `Delay Flag` — boolean indicator vs. expected SLA
+- `First Attempt Delivery` — whether delivery succeeded on first try
+- `Route Path` — hub-to-hub sequence mapping
+- `Hub Sequence` — ordered list of scan locations
+
+### 4. Advanced Analytics Logic
+- Tracks shipment path **until first occurrence of a key hub** (e.g., Memphis)
+- Analyzes **multi-hub routing patterns**
+- Differentiates **weekday vs. Saturday** shipment behavior
+- Calculates **expected vs. actual** delivery timelines
+- Measures **first-attempt delivery success rate** (~90% logic threshold)
+
+### 5. Power BI Dashboard
+Interactive logistics dashboard with drill-down capabilities across hubs, dates, and shipment statuses.
+
+---
+
+## ✅ Key Features
+
+- 📡 **Real-time shipment tracking** via FedEx API integration
+- 🗺️ **Multi-hub route analysis** — full origin-to-destination journey mapping
+- ⏱️ **Delay detection & root cause analysis** by hub and time period
+- 🎯 **First attempt delivery tracking** with configurable success thresholds
+- 📊 **Interactive, scalable Power BI dashboard**
+- 🔄 **Automated token refresh** for uninterrupted API access
+- 🚨 **Invalid AWB logging** for data quality tracking
+
+---
+
+## 📊 Dashboard KPIs
+
+### Core Metrics
+| KPI | Description |
+|---|---|
+| **Total Shipments** | Count of AWBs processed in period |
+| **OTIF %** | On-Time In-Full delivery rate |
+| **Avg. Transit Time** | Mean hours from pickup to delivery |
+| **First Attempt Success Rate** | % delivered without re-attempt |
+| **Delayed Shipments %** | % exceeding expected delivery window |
+
+### Visualizations
+- 🔀 **Shipment Flow** — Origin → Hub(s) → Destination Sankey/path view
+- 🌡️ **Delay Heatmaps** — by time of day, day of week, and hub
+- 🏭 **Hub-wise Performance Analysis** — dwell time and throughput by facility
+- 📈 **Trend Analysis** — daily and weekly shipment volume and status breakdown
+- 🛣️ **Route Efficiency Comparison** — single-hop vs. multi-hop route performance
+
+---
+
+## 🔍 Key Insights
+
+- 📍 Identified **delay-prone hubs** consistently impacting downstream delivery timelines
+- 📅 Discovered measurable patterns in **weekend shipment delays** vs. weekday
+- 🔁 Highlighted inefficiencies in **multi-hop routes** vs. direct routing
+- 👁️ Delivered **end-to-end lifecycle visibility** previously unavailable to operations teams
+
+---
+
+## 💼 Business Impact
+
+| Outcome | Magnitude |
+|---|---|
+| Reduced manual tracking effort | ~50% reduction |
+| Improved delivery planning efficiency | 15–25% improvement |
+| Faster decision-making | Real-time vs. next-day reporting |
+| Operational transparency | Full shipment lifecycle visible |
+
+---
+
+## 📁 Project Structure
+
+```
+logistics-analytics-platform/
+│
+├── fedex_tracking.py          # Core ETL script — API auth, extraction, CSV export
+├── invalid_awbs_log.txt       # Auto-generated log of AWBs failing validation
+│
+├── data/
+│   └── fedex_full_journey.csv # Output: parsed shipment scan events
+│
+├── sql/
+│   ├── schema.sql             # MySQL table definitions
+│   └── kpi_queries.sql        # SQL logic for OTIF, transit time, delay flags
+│
+├── powerbi/
+│   └── logistics_dashboard.pbix  # Power BI report file
+│
+└── README.md
+```
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+```bash
+pip install pandas requests python-dateutil pytz openpyxl
+```
+
+### Configuration
+Update the following in `fedex_tracking.py`:
+
+```python
+# FedEx API credentials
+API_KEY    = "your_client_id"
+API_SECRET = "your_client_secret"
+
+# File paths
+input_file  = "path/to/your/input.xlsx"   # Must contain 'AWB Number' and 'Shp Date' columns
+output_dir  = "path/to/output/folder"
+```
+
+### Run
+```bash
+python fedex_tracking.py
+```
+
+**Output:** `fedex_full_journey.csv` in your configured `output_dir`
+
+### Input File Requirements
+The input Excel file must have a sheet named `FALCON MIS` with at minimum:
+
+| Column | Format | Notes |
+|---|---|---|
+| `AWB Number` | Numeric string | 12–15 digits |
+| `Shp Date` | Date | Used for 30-day cutoff filter |
+
+---
+
+## 🔮 Future Enhancements
+
+- [ ] **Predictive delay modeling** using ML (XGBoost / LightGBM on historical scan patterns)
+- [ ] **Automated route optimization** suggestions based on hub dwell time analysis
+- [ ] **Multi-carrier integration** — DHL, UPS, Blue Dart alongside FedEx
+- [ ] **Real-time alert system** for shipments breaching SLA thresholds
+- [ ] **Airflow/cron scheduling** for fully automated daily pipeline execution
+- [ ] **REST API layer** to expose tracking data to other internal systems
+
+---
+
+## 👤 Author
+
+**Jatin Vadile**
+
+
+---
+
+> *Built to bring clarity to complexity — one shipment at a time.*
